@@ -1,0 +1,48 @@
+{
+  "title": "Welcome to react using react-i18next",
+  "post": {
+    "post": "Post",
+    "upload_a_post": "Upload a Post",
+    "drop_image_to_upload": "Drop image to upload",
+    "upload": "Upload",
+    "new_post": "New Post",
+    "title": "Title",
+    "description": "Description",
+    "images": "Images",
+    "category": "Category",
+    "submit": "Submit"
+  },
+  "description": {
+    "part1": "To get started, edit <1>src/App.js</1> and save to reload.",
+    "part2": "Switch language between english and german using buttons above."
+  },
+  "menu": {
+    "hot": "Hot",
+    "new": "New",
+    "top_week": "Top week",
+    "light": "Light",
+    "dark": "Dark",
+    "register_login": "Register/Sign In"
+  },
+  "detail_page": {
+    "upload_date": "Upload Date",
+    "category": "Category",
+    "posted_by": "Posted by",
+    "description": "Description"
+  },
+  "register_page": {
+    "register": "Register",
+    "email": "Email",
+    "i_have_read_the_agreement": "I have read the",
+    "agreement": "agreement",
+    "user_not_found": "User not found",
+    "wrong_email_or_password": "Wrong email or password",
+    "please_input_your_email": "Please input your Email!",
+    "is_required": "is required!",
+    "is_not_a_valid_email": "is not a valid email!",
+    "is_not_a_valid_number": "is not a valid number!",
+    "password": "Password",
+    "please_input_your_password": "Please input your password!",
+    "confirm_password": "Confirm Password"
+  }
+}
