@@ -9,8 +9,11 @@
     "title": "Title",
     "description": "Description",
     "images": "Images",
+    "gallery": "Gallery",
+    "cover_image": "Cover image",
     "category": "Category",
-    "submit": "Submit"
+    "submit": "Submit",
+    "click_the_eye_icon_in_the_photo_gallery": "Tip: Click the eye icon in the photo gallery"
   },
   "description": {
     "part1": "To get started, edit <1>src/App.js</1> and save to reload.",
