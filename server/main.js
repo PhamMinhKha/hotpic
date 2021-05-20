@@ -1,11 +1,14 @@
 import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
 import { PostsCollection } from '/imports/db/PostsCollection'
+import { TaskCollection } from '/imports/db/TaskCollection'
 import bodyParser from 'body-parser'
+import '/imports/api/PostsPublications';
 import '/imports/api/PostsMethods';
-import '/imports/api/tasksPublications';
 import '/imports/api/UsersMethods';
 import '/imports/api/UploadShare';
+import '/imports/api/CategoriesMethods';
+import '/imports/api/CategoriesPublications';
 // const insertTask = (taskText, user) => {
 //   TaskCollection.insert({
 //     text: taskText,

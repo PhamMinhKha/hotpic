@@ -18,6 +18,7 @@ import { Button, Layout } from 'antd';
 const { Header, Footer, Sider, Content } = Layout;
 import Home from './screens/Home';
 import Detail from './screens/Detail';
+import CategoryManagement from './screens/CategoryManagement';
 import Register from './screens/Register';
 import Menu from './components/TopMenu';
 import LeftMenu from './components/LeftMenu';
@@ -32,7 +33,7 @@ export const App = () => {
   /* Đa ngôn ngữ */
   const { t, i18n } = useTranslation();
   /* Tạo context cho app */
-  const [config, setConfig] = useState({ theme: 'light', lng: 'en', left_menu_collapsed: false });
+  const [config, setConfig] = useState({ theme: 'light', lng: 'en', left_menu_collapsed: false , categories: []});
   /* Theo dõi database mongo */
   const user = useTracker(() => Meteor.user())
   const hideCompletedFilter = { isChecked: { $ne: true } };
@@ -85,12 +86,15 @@ export const App = () => {
               <Menu changeLanguage={changeLanguage} />
               <Layout>
                 <Sider theme={config.theme}
-                  collapsed={config.left_menu_collapsed}>
+                  collapsed={config.left_menu_collapsed} reverseArrow={true} breakpoint="xs" collapsedWidth={0} onBreakpoint={() => setConfig({ ...config, left_menu_collapsed: true })}>
                   <LeftMenu />
                 </Sider>
-                <Content className="themeChange content" style={{ margin: '24px 16px 0', overflow: 'initial' }}>
+                <Content className="themeChange content" style={{ overflow: 'initial' }}>
                   <Switch>
-                    <Route path="/detail">
+                    <Route path="/category-management">
+                      <CategoryManagement />
+                    </Route>
+                    <Route path="/detail/:id">
                       <Detail />
                     </Route>
                     <Route path="/register">

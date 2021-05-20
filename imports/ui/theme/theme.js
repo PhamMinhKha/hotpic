@@ -4,6 +4,7 @@ export const lightTheme = {
     toggleBorder: '#FFF',
     gradient: 'linear-gradient(#39598A, #79D7ED)',
     themeChange: '#E2E2E2',
+    hover_color: "#000000",
   }
   
   export const darkTheme = {
@@ -12,5 +13,6 @@ export const lightTheme = {
     toggleBorder: '#6B8096',
     gradient: 'linear-gradient(#091236, #1E215D)',
     themeChange: '#363537',
+    hover_color: "#E5E4D1",
   }
   

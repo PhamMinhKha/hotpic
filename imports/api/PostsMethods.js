@@ -21,7 +21,11 @@ Meteor.methods({
             category: post.post_category,
             type: post.post_type,
             cover_uid: post.cover_uid,
-            userId: this.userId
+            userId: this.userId,
+            like: 0,
+            dislike: 0,
+            share:0,
+            createAt: Date.now()
         }, function (error, result) {
             console.log(error, result)
             return result

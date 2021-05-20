@@ -3,6 +3,7 @@ import { FilesCollection } from 'meteor/ostrio:files';
 
 const Images = new FilesCollection({
     collectionName: 'Images',
+    storagePath: '/Users/phamkha/Desktop/Meteor/images',
     allowClientCode: true, // Disallow remove files from Client
     onBeforeUpload(file) {
 

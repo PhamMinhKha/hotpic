@@ -1,19 +1,19 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useContext, useEffect, useMemo } from 'react'
 import { Menu, Switch, Modal, Upload, Button, message, Form, Input, Select, Image as ImageAnt, Typography } from 'antd';
-import { SettingOutlined, UserOutlined, ProfileOutlined, LogoutOutlined, CloudUploadOutlined, UploadOutlined, PlusOutlined } from '@ant-design/icons';
+import { SettingOutlined, UserOutlined, ProfileOutlined, LogoutOutlined, CloudUploadOutlined, MenuUnfoldOutlined, PlusOutlined, PartitionOutlined, FileDoneOutlined, TranslationOutlined, MenuFoldOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { useTracker } from 'meteor/react-meteor-data';
 import Images from '../../api/UploadShare';
 import { FilesCollection } from 'meteor/ostrio:files';
+import { CategoriesCollection } from '../../db/CategoriesCollection';
 /* Import context */
 import ConfigContext from '../ConfigContext';
 /* Đa ngôn ngữ */
 import { useTranslation } from 'react-i18next';
 const { Option } = Select;
-const children = [];
-for (let i = 10; i < 36; i++) {
-    children.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>);
-}
+// for (let i = 10; i < 36; i++) {
+//     children.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>);
+// }
 const { SubMenu } = Menu;
 const layout = {
     labelCol: {
@@ -29,13 +29,27 @@ const tailLayout = {
         span: 16,
     },
 };
-export default function TopMenu({ changeLanguage }) {
+var scrollPos = 0;
+var children = [];
+const TopMenu = function ({ changeLanguage }) {
+    console.log('TopMenu is running ...');
     const [isModalVisible, setIsModalVisible] = useState(false);
+    const [isStickyMenu, setStickyMenu] = useState(false);
     const [links, setLinks] = useState([]);
     const [listFile, setListFile] = useState([]);
     const [imagesUploaded, setImagesUploaded] = useState([]);
     const [cover, setCover] = useState(null);
     const user = useTracker(() => Meteor.user());
+    const { categories, loadingCategories } = useTracker(() => {
+        const handler = Meteor.subscribe('categories');
+        if (!handler.ready()) {
+            return { categories: [], loadingCategories: true };
+        }
+        const categories = CategoriesCollection.find({}).fetch();
+        children.push(1);
+        handleCategories(categories);
+        return { categories, loadingCategories: false }
+    }, [children])
     const [form] = Form.useForm();
     /* Đa ngôn ngữ */
     const { t, i18n } = useTranslation();
@@ -44,9 +58,22 @@ export default function TopMenu({ changeLanguage }) {
     /* Lấy context */
     const [config, setConfig] = useContext(ConfigContext);
 
-    // useEffect(() => {
-    //     autoSelectCoverImage();
-    // }, [imagesUploaded])
+    useEffect(() => {
+        window.addEventListener("scroll", handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        }
+    }, [])
+    handleScroll= () => {
+        if ((document.body.getBoundingClientRect()).top > scrollPos && window.pageYOffset > 240)
+        {
+            setStickyMenu(true);
+        }
+        else {
+            setStickyMenu(false);
+        }
+        scrollPos = (document.body.getBoundingClientRect()).top;
+      }
     const uploadButton = (
         <div>
             <PlusOutlined />
@@ -64,6 +91,9 @@ export default function TopMenu({ changeLanguage }) {
     }
     function handleChange(value) {
         console.log(`selected ${value}`);
+    }
+    handleCategories = e => {
+        setConfig({ ...config, categories: e })
     }
     handleClick = e => {
         setActivemenu(e.key)
@@ -198,9 +228,10 @@ export default function TopMenu({ changeLanguage }) {
         else data.cover_uid = listFile[0];
         let t = Meteor.call("posts.insert", data, function (error, result) {
             if (error) {
-                message.error('error');
+                message.error('error:' + error);
             } else {
                 //success
+                setImagesUploaded([]);
                 setListFile([]);
                 setCover(null);
                 setIsModalVisible(false);
@@ -225,9 +256,16 @@ export default function TopMenu({ changeLanguage }) {
         // console.log(file);
         setCover(file);
     }
+    toggleCollapsed = () => {
+        setConfig({ ...config, left_menu_collapsed: !config.left_menu_collapsed })
+    };
     return (
         <>
-            <Menu onClick={(e) => handleClick(e)} selectedKeys={activeMenu} mode="horizontal" theme={config.theme}>
+            <Menu onClick={(e) => handleClick(e)} selectedKeys={activeMenu} mode="horizontal" theme={config.theme} style={isStickyMenu ? {position: "fixed", zIndex:999, width:"100%"} : {}}>
+                <Menu.Item onClick={this.toggleCollapsed}>
+                    {React.createElement(config.left_menu_collapsed ? MenuUnfoldOutlined : MenuFoldOutlined)}
+                    {config.left_menu_collapsed ? "Show" : "Hide"}
+                </Menu.Item>
                 <Menu.Item key="hot" >
                     <Link to="/">{t('menu.hot')}</Link>
                 </Menu.Item>
@@ -237,10 +275,14 @@ export default function TopMenu({ changeLanguage }) {
                 <Menu.Item key="top_week"  >
                     {t('menu.top_week')}
                 </Menu.Item>
+                <SubMenu key="AdminTools" icon={<SettingOutlined />} title="Admin Tools" style={{ float: "right" }}>
+                    <Menu.Item key="category-management" icon={<PartitionOutlined />} ><Link to="/category-management">{t("admin_tools.category_management")}</Link></Menu.Item>
+                    <Menu.Item key="post-management" icon={<FileDoneOutlined />} ><Link to="/post-management">{t("admin_tools.post_management")}</Link></Menu.Item>
+                </SubMenu>
                 {user ? (
                     <>
                         <SubMenu key="UserMenu" icon={<UserOutlined />} title={user.profile.name} style={{ float: 'right' }}>
-                            <SubMenu key="SubMenu" icon={<SettingOutlined />} title="Language">
+                            <SubMenu key="SubMenu" icon={<TranslationOutlined />} title="Language">
                                 <Menu.Item key="language:vi" onClick={() => handleChangeLanguage('vi')}>Tiếng Việt</Menu.Item>
                                 <Menu.Item key="language:en" onClick={() => handleChangeLanguage('en')}>English</Menu.Item>
                             </SubMenu>
@@ -302,8 +344,8 @@ export default function TopMenu({ changeLanguage }) {
                             {uploadButton}
                         </Upload>
                     </Form.Item>
-                    <Form.Item label={t("post.cover_image")} name="cover">
-                        <Typography.Text type="secondary" style={{ flex: 1, display: "block"}}>{t("post.click_the_eye_icon_in_the_photo_gallery")}</Typography.Text>
+                    <Form.Item label={t("post.cover_image")}>
+                        <Typography.Text type="secondary" style={{ flex: 1, display: "block" }}>{t("post.click_the_eye_icon_in_the_photo_gallery")}</Typography.Text>
                         <ImageAnt
                             width={100}
                             height={100}
@@ -323,7 +365,9 @@ export default function TopMenu({ changeLanguage }) {
                             placeholder="Please select"
                             onChange={handleChange}
                         >
-                            {children}
+                            {categories.length > 0 ? categories.map((value, index) => {
+                                return <Option key={value._id}>{value.name}</Option>
+                            }) : <></>}
                         </Select>
                     </Form.Item>
                     <Form.Item {...layout}>
@@ -337,3 +381,4 @@ export default function TopMenu({ changeLanguage }) {
     );
 
 }
+export default React.memo(TopMenu);

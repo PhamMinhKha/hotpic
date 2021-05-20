@@ -47,5 +47,14 @@
     "password": "Password",
     "please_input_your_password": "Please input your password!",
     "confirm_password": "Confirm Password"
+  },
+  "admin_tools": {
+    "category_management": "Category management",
+    "post_management": "Post management",
+    "category_name": "Category name",
+    "category_icon": "Icon",
+    "introduction_to_the_category": "Introduction to the category",
+    "category_keyword": "Category keyword",
+    "submit": "Submit"
   }
 }

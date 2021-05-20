@@ -31,5 +31,12 @@ export const GlobalStyles = createGlobalStyle`
     font-size:30px;
     color: silver;
   }
-
+  .shadow_box {
+    -webkit-box-shadow: 0px 0px 4px 0px #000000; 
+    box-shadow: 0px 0px 4px 0px #000000;
+}
+.shadow_box:hover {
+  -webkit-box-shadow: 0px 0px 10px 1px  ${({ theme }) => theme.hover_color};
+  box-shadow: 0px 0px 10px 1px  ${({ theme }) => theme.hover_color};
+}
   `
