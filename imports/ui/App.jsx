@@ -1,7 +1,8 @@
 import React, { useState, Fragment, useContext, Children } from 'react';
 import { useTracker } from 'meteor/react-meteor-data'
+
 import { TaskCollection, Task2Collection } from '../db/TaskCollection'
-import 'antd/dist/antd.css';
+import 'antd/dist/antd';
 import ConfigContext, { ConfigProvider } from './ConfigContext';
 import {
   BrowserRouter as Router,
